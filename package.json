@@ -1,0 +1,25 @@
+{
+  "name": "finwise-ai",
+  "version": "1.0.0",
+  "description": "FinWise AI – Smart Expense Tracker & Financial Intelligence Platform",
+  "scripts": {
+    "server": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build:client": "npm run build --prefix client",
+    "install:all": "npm install && npm install --prefix server && npm install --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "keywords": [
+    "finance",
+    "expense-tracker",
+    "ai",
+    "groq",
+    "chromadb",
+    "receipt-ocr"
+  ],
+  "author": "",
+  "license": "MIT"
+}

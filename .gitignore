@@ -1,0 +1,55 @@
+# Environment variables - NEVER COMMIT SENSITIVE KEYS
+.env
+.env.*
+*.env
+server/.env
+client/.env
+!.env.example
+!server/.env.example
+
+# Dependencies
+node_modules/
+server/node_modules/
+client/node_modules/
+
+# Production build outputs
+dist/
+client/dist/
+build/
+
+# Uploaded receipts & files
+uploads/
+server/uploads/
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.pdf
+*.traineddata
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

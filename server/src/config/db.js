@@ -13,9 +13,9 @@ export const connectDB = async () => {
     if (mongoUri) {
       console.log('Connecting to MongoDB Atlas / configured database...');
       await mongoose.connect(mongoUri, {
-        serverSelectionTimeoutMS: 5000,
+        serverSelectionTimeoutMS: 30000,
       });
-      console.log(`MongoDB Connected: ${mongoose.connection.host}`);
+      console.log(`✅ MongoDB Connected successfully to database "${mongoose.connection.name}" on host: ${mongoose.connection.host}`);
       return;
     }
 
@@ -31,10 +31,10 @@ export const connectDB = async () => {
     console.log(`Connected to in-memory MongoDB at: ${uri}`);
     console.log('💡 Note: Set MONGODB_URI in server/.env with your MongoDB Atlas connection string for persistent cloud storage.');
   } catch (err) {
-    console.error(`MongoDB Connection Error: ${err.message}`);
+    console.error(`❌ MongoDB Connection Error: ${err.message}`);
     
-    // If Atlas connection timed out/failed, attempt memory server fallback so the app remains usable for testing
-    if (!memoryServer && !process.env.VERCEL) {
+    // Only attempt memory server fallback if MONGODB_URI was NOT provided
+    if (!mongoUri && !memoryServer && !process.env.VERCEL) {
       try {
         console.warn('⚠️ Attempting fallback to in-memory database to keep application running...');
         const { MongoMemoryServer } = await import('mongodb-memory-server');
@@ -51,6 +51,7 @@ export const connectDB = async () => {
     if (process.env.VERCEL) {
       throw err;
     }
+    console.error('⚠️ Could not connect to MongoDB Atlas. Please verify that your IP address is whitelisted in MongoDB Atlas Network Access (0.0.0.0/0) and check your internet connection.');
     process.exit(1);
   }
 };

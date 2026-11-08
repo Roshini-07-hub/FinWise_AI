@@ -30,7 +30,7 @@ export default function Register() {
       await register(name, email, password);
       navigate('/');
     } catch (err) {
-      setErrorMsg(err.message || 'Registration failed. Please try again.');
+      setErrorMsg(err.response?.data?.message || err.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }

@@ -1,17 +1,20 @@
+import mongoose from 'mongoose';
 import app from '../server/src/app.js';
 import { connectDB } from '../server/src/config/db.js';
 
-let isConnected = false;
-
 export default async function handler(req, res) {
   try {
-    if (!isConnected) {
+    // Fast path for CORS preflight
+    if (req.method === 'OPTIONS') {
+      return app(req, res);
+    }
+
+    if (mongoose.connection.readyState !== 1) {
       await connectDB();
-      isConnected = true;
     }
 
     // Ensure the URL matches the Express /api mount points
-    if (req.url && !req.url.startsWith('/api')) {
+    if (req.url && !req.url.startsWith('/api') && !req.url.startsWith('/uploads')) {
       req.url = '/api' + (req.url.startsWith('/') ? req.url : '/' + req.url);
     }
 

@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
+import os from 'os';
 import { fileURLToPath } from 'url';
 import rateLimit from 'express-rate-limit';
 
@@ -43,7 +44,9 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Static uploads directory
-const uploadsPath = path.join(process.cwd(), 'uploads');
+const uploadsPath = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME
+  ? path.join(os.tmpdir(), 'uploads')
+  : path.join(process.cwd(), 'uploads');
 app.use('/uploads', express.static(uploadsPath));
 
 // Rate Limiter for API endpoints
@@ -56,7 +59,16 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-// Health check endpoint
+// Root & Health check endpoint
+app.get('/api', (req, res) => {
+  res.json({
+    status: 'ok',
+    service: 'FinWise AI Platform Backend',
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+  });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',

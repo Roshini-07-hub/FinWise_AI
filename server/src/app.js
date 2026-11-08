@@ -43,6 +43,14 @@ if (process.env.NODE_ENV !== 'test') {
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// Ensure incoming requests match the /api mount path even if a proxy/service router strips the prefix
+app.use((req, res, next) => {
+  if (req.url && !req.url.startsWith('/api') && !req.url.startsWith('/uploads')) {
+    req.url = '/api' + (req.url.startsWith('/') ? req.url : '/' + req.url);
+  }
+  next();
+});
+
 // Static uploads directory
 const uploadsPath = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME
   ? path.join(os.tmpdir(), 'uploads')

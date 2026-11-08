@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const API_BASE = '/api';
+// If an external production API URL is set, use it; otherwise default to '/api' for same-origin serverless routing
+const API_BASE = (import.meta.env.VITE_API_BASE && !import.meta.env.VITE_API_BASE.includes('localhost'))
+  ? import.meta.env.VITE_API_BASE
+  : '/api';
 
 const api = axios.create({
   baseURL: API_BASE,
